@@ -73,7 +73,7 @@ Write-Host "The Teradici Agent exe downloaded location is '$teradiciExePath'"
 Write-Host "The Leostream Agent exe downloaded location iss '$leostreamExePath'"
 wget $teradiciAgentUrl -OutFile $teradiciExePath
 wget $leostreamAgentUrl -OutFile $leostreamExePath
-Start-Sleep -s 360
+
 
 if ($nvidiaazure -match "Yes")
 {
@@ -107,8 +107,7 @@ Write-Host "The NVIDIDA exe download location is '$nvidiaExePath'"
 Write-Host "The NVIDIA Driver exe Url  is '$nvidiaUrl'"
 Write-Host "The NVIDIA exe name is '$nvidiaExeName'"
   wget $nvidiaUrl -OutFile $nvidiaExePath
-  & $nvidiaExePath  /s
-  Start-Sleep -s 60
+  $nvidiaExePath  /s | out-null
   $NVIDIAfolder = [System.String]::Format("C:\NVIDIA\{0}", $nvidiaVer)
 }
 
@@ -116,14 +115,14 @@ Write-Host "The NVIDIA Folder name is '$NVIDIAfolder'"
 Set-Location $NVIDIAfolder
 $nvidiaLogfile = [System.String]::Format("{0}\nVidia.install.log", $NVIDIAfolder)
 Set-ExecutionPolicy Unrestricted -force
-.\setup.exe -s -n -ignorepnp Display.NView Display.NVWMI -log$nvidiaLogfile -loglevel:6 
-Start-Sleep -s 180
-& $teradiciExePath /S /NoPostReboot
-Start-Sleep -s 90 
+.\setup.exe -s -n -ignorepnp -log:$nvidiaLogfile -loglevel:6| out-null
+$teradiciExePath /S /NoPostReboot | out-null
+
+
 Write-Host "teradiciagent install over"
 cd 'C:\Program Files (x86)\Teradici\PCoIP Agent\licenses\'
 Write-Host "pre-activate"
-.\appactutil.exe -served -comm soap -commServer https://teradici.flexnetoperations.com/control/trdi/ActivationService -entitlementID $license
+.\appactutil.exe -served -comm soap -commServer https://teradici.flexnetoperations.com/control/trdi/ActivationService -entitlementID $license | out-null
 Write-Host "activation over"
 if ($teradiciAgentVer -match "2.7.0.4060")
 {
