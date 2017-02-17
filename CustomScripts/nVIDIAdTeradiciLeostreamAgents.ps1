@@ -115,7 +115,7 @@ Write-Host "The NVIDIA exe name is '$nvidiaExeName'"
 Write-Host "The NVIDIA Folder name is '$NVIDIAfolder'"
 Set-Location $NVIDIAfolder
 Set-ExecutionPolicy Unrestricted -force
-.\setup.exe -s -noreboot -clean
+.\setup.exe -s -n -ignorepnp Display.NView Display.NVWMI -log" $NVIDIAfolder\nVidia.install.log" -loglevel:6 
 Start-Sleep -s 180
 & $teradiciExePath /S /NoPostReboot
 Start-Sleep -s 90 
