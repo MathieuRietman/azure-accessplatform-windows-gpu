@@ -107,7 +107,7 @@ Write-Host "The NVIDIDA exe download location is '$nvidiaExePath'"
 Write-Host "The NVIDIA Driver exe Url  is '$nvidiaUrl'"
 Write-Host "The NVIDIA exe name is '$nvidiaExeName'"
   wget $nvidiaUrl -OutFile $nvidiaExePath
-  $nvidiaExePath  /s | out-null
+  & $nvidiaExePath  /s | out-null
   $NVIDIAfolder = [System.String]::Format("C:\NVIDIA\{0}", $nvidiaVer)
 }
 
@@ -115,7 +115,7 @@ Write-Host "The NVIDIA Folder name is '$NVIDIAfolder'"
 Set-Location $NVIDIAfolder
 $nvidiaLogfile = [System.String]::Format("{0}\nVidia.install.log", $NVIDIAfolder)
 Set-ExecutionPolicy Unrestricted -force
-.\setup.exe -s -n -ignorepnp -log:$nvidiaLogfile -loglevel:6| out-null
+& .\setup.exe -s -n -ignorepnp -log:$nvidiaLogfile -loglevel:6| out-null
 $teradiciExePath /S /NoPostReboot | out-null
 
 
