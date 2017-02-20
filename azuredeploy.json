@@ -177,7 +177,7 @@
     "subnetName": "[parameters('subName')]",
     "subnetPrefix": "[parameters('subPrefix')]",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
-    "vhdStorageAccountName": "[uniqueString(resourceGroup().id, 'storage')]",
+    "DiagStorageAccountName": "[uniqueString(resourceGroup().id, 'storage')]",
     "virtualNetworkName": "[parameters('VNetName')]",
     "vmName": "[parameters('VMName')]",
     "nVIDIAdTeradiciLeostreamAgentsScriptFolder": "CustomScripts",
@@ -186,7 +186,7 @@
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('vhdStorageAccountName')]",
+      "name": "[variables('DiagStorageAccountName')]",
       "apiVersion": "2016-01-01",
       "location": "[resourceGroup().location]",
       "sku": {
@@ -260,7 +260,7 @@
       "name": "[variables('vmName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[variables('vhdStorageAccountName')]",
+        "[variables('DiagStorageAccountName')]",
         "[variables('nicName')]"
       ],
       "properties": {
@@ -281,9 +281,6 @@
           },
           "osDisk": {
             "name": "osdisk",
-            "vhd": {
-              "uri": "[concat(reference(variables('vhdStorageAccountName'), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, 'vhds/osdisk.vhd')]"
-            },
             "caching": "ReadWrite",
             "createOption": "FromImage"
           }
@@ -294,7 +291,13 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
             }
           ]
-        }
+        },
+        "diagnosticsProfile": {
+           "bootDiagnostics": {
+                 "enabled": true,
+                 "storageUri": "[reference(resourceId('ttt', 'Microsoft.Storage/storageAccounts', parameters('DiagStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]"
+              }
+         }
       },
       "resources": [
         {
