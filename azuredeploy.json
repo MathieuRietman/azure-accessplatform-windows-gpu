@@ -295,7 +295,7 @@
         "diagnosticsProfile": {
            "bootDiagnostics": {
                  "enabled": true,
-                 "storageUri": "[reference(resourceId('ttt', 'Microsoft.Storage/storageAccounts', parameters('DiagStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]"
+                 "storageUri": "[reference(resourceId('ttt', 'Microsoft.Storage/storageAccounts',variables('DiagStorageAccountName')), '2015-06-15').primaryEndpoints['blob']]"
               }
          }
       },
