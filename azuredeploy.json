@@ -255,7 +255,8 @@
       }
     },
     {
-      "apiVersion": "2016-03-30",
+
+      "apiVersion": "2016-04-30-preview",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('vmName')]",
       "location": "[resourceGroup().location]",
@@ -270,7 +271,10 @@
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "adminPassword": "[parameters('adminPassword')]",
+           "windowsConfiguration": {
+                        "provisionVmAgent": "true"
+                    }
         },
         "storageProfile": {
           "imageReference": {
